@@ -32,7 +32,7 @@ jobs:
         run: npm i
         
       - name: Grant execute permission for gradlew
-        run: cd android && chmod +x ./gradlew  
+        run: cd android/app && chmod +x ./gradlew  
         
       - name: Run tests
         run: cd android && ./gradlew test
