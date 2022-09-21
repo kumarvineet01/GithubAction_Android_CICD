@@ -28,11 +28,11 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
         
+      - name: installing npm
+        run: npm i
+        
       - name: Grant execute permission for gradlew
         run: cd android && chmod +x ./gradlew  
-
-#       - name: installing npm
-#         run: npm i
         
       - name: Run tests
         run: cd android && ./gradlew test
