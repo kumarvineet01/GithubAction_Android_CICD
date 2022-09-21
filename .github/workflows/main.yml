@@ -72,13 +72,16 @@ jobs:
         run: cd android && ./gradlew assembleRelease    
 
       - name: check_File & Path
-        run: ls -l android/app/build/outputs/apk/release && pwd
+        run: ls -la && cd android/app/build/outputs/apk/release && ls -la
 
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
           name: extentia.apk
-          path: android/app/build/outputs/apk/release/extentia.apk  
+          path: android/app/build/outputs/apk/release/
+          
+      - name: APK file location
+        run: ls -l android/app/build/outputs/apk/release && pwd
 
           
 #       - name: upload artefact to App Center
