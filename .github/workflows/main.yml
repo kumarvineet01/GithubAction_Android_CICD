@@ -1,0 +1,113 @@
+name: Android_CICD
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+# env:
+#  APP_CENTER_TOKEN: ${{ secrets.APP_CENTER_TOKEN }} 
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Upload html test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: lint.html
+          path: app/build/reports/lint-results-debug.html
+
+  unit-test-and-deploy-to-appcenter:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        
+      - name: Run tests
+        run: ./gradlew test
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit_test_report
+          path: app/build/reports/tests/testDebugUnitTest/
+
+#   instrumentation-test:
+#     needs: [unit-test]
+#     runs-on: macos-latest
+#     steps:
+#       - name: Checkout the code
+#         uses: actions/checkout@v2
+        
+#       - name: Grant execute permission for gradlew
+#         run: chmod +x gradlew
+
+#       - name: Run espresso tests
+#         uses: reactivecircus/android-emulator-runner@v2
+#         with:
+#           api-level: 29
+#           script: ./gradlew connectedCheck
+
+#       - name: Upload test report
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: instrumentation_test_report
+#           path: app/build/reports/androidTests/connected/ 
+          
+ 
+
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace      
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: expense-manager.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+      - name: check_File & Path
+        run: ls -l app/build/outputs/apk/debug && pwd
+          
+      - name: Build with Gradle
+        run: ./gradlew assembleRelease
+          
+      - name: upload apkrelease
+        uses: actions/upload-artifact@v3.1.0
+        with: 
+         name: expense-manager.apk
+         path: app/build/outputs/apk/release/
+         
+      - name: Check_file & Path
+        run: ls -l app/build/outputs/apk/release && pwd     
+
+          
+#       - name: upload artefact to App Center
+#         uses: wzieba/AppCenter-Github-Action@v1
+#         with:
+#           appName: ronakukani/Github-Actions-Demo
+#           token: ${{secrets.HUB_TOKEN}}
+#           group: Testers
+#           file: app/build/outputs/apk/debug/expense-manager.apk
+#           notifyTesters: true
+#           debug: false
+#           releaseNotes: "here is your release note"
+
+      
+
+#       - name: App Center
+#         uses: wzieba/AppCenter-Github-Action@v1.3.3
+#         with:
+#          appName: kumarvineet011/demoapp
+#          token: ${{secrets.APP_CENTER_TOKEN}}
+#          group: demoapp
+#          file: app/build/outputs/apk/release/app-release-unsigned.apk
+#          notifyTesters: true
+#          debug: false 
