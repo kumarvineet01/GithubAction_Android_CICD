@@ -68,28 +68,17 @@ jobs:
  
 
 
-      - name: Build debug APK
-        run: cd android && ./gradlew assembleRelease --stacktrace      
+      - name: Build  APK
+        run: cd android && ./gradlew assembleRelease    
+
+      - name: check_File & Path
+        run: ls -l android/app/build/outputs/apk/release && pwd
 
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
           name: extentia.apk
-          path: cd /android/app/build/outputs/apk/release/extentia.apk
-      - name: check_File & Path
-        run: ls -l android/app/build/outputs/apk/release && pwd
-          
-      - name: Build with Gradle
-        run: ./gradlew assembleRelease
-          
-      - name: upload apkrelease
-        uses: actions/upload-artifact@v3.1.0
-        with: 
-         name: expense-manager.apk
-         path: app/build/outputs/apk/release/
-         
-      - name: Check_file & Path
-        run: ls -l app/build/outputs/apk/release && pwd     
+          path: cd android/app/build/outputs/apk/release/extentia.apk  
 
           
 #       - name: upload artefact to App Center
