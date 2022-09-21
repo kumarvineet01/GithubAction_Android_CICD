@@ -36,12 +36,17 @@ jobs:
         
       - name: Run tests
         run: cd android && ./gradlew test
-
+        
+      - name: check the test file
+        run: ls -la && cd android/app/build/reports && ls -la
+        
+      
       - name: Upload test report
         uses: actions/upload-artifact@v2
         with:
           name: unit_test_report
           path: android/app/build/reports/tests/testDebugUnitTest/
+
 
 #   instrumentation-test:
 #     needs: [unit-test]
