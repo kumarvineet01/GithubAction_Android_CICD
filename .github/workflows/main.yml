@@ -38,7 +38,7 @@ jobs:
         run: cd android && ./gradlew test
         
       - name: check the test file
-        run: cd android/app && ls -la
+        run: cd android/app/build && ls -la
         
       
       - name: Upload test report
