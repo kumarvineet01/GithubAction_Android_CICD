@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: unit_test_report
-          path: app/build/reports/tests/testDebugUnitTest/
+          path: android/app/build/reports/tests/testDebugUnitTest/
 
 #   instrumentation-test:
 #     needs: [unit-test]
@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: extentia.apk
-          path: cd android/app/build/outputs/apk/release/extentia.apk  
+          path: android/app/build/outputs/apk/release/extentia.apk  
 
           
 #       - name: upload artefact to App Center
