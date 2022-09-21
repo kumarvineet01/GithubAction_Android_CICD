@@ -33,7 +33,7 @@ jobs:
        # run: chmod +x gradlew
         
       - name: Run tests
-        run: ./gradlew test
+        run: cd android && chmod +x ./gradlew test
 
       - name: Upload test report
         uses: actions/upload-artifact@v2
