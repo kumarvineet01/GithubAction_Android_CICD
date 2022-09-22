@@ -35,14 +35,7 @@ jobs:
         run: cd android && chmod +x ./gradlew  
         
       - name: Run tests
-        run: cd android && ./gradlew test
-        
-      - name: check the test file
-        run: cd android/app/build/outputs && ls -la
-    
-      - name: check the test file
-        run: cd android/app/build/generated && ls -la
-        
+        run: cd android && ./gradlew test     
       
       - name: Upload test report
         uses: actions/upload-artifact@v2
@@ -105,12 +98,12 @@ jobs:
 
       
 
-#       - name: App Center
-#         uses: wzieba/AppCenter-Github-Action@v1.3.3
-#         with:
-#          appName: kumarvineet011/demoapp
-#          token: ${{secrets.APP_CENTER_TOKEN}}
-#          group: demoapp
-#          file: app/build/outputs/apk/release/app-release-unsigned.apk
-#          notifyTesters: true
-#          debug: false 
+      - name: App Center
+        uses: wzieba/AppCenter-Github-Action@v1.3.3
+        with:
+         appName: kumarvineet011/extentia_app
+         token: ${{secrets.APP_CENTER_TOKEN}}
+         group: android_group
+         file: android/app/build/outputs/apk/release/app-release.apk
+         notifyTesters: true
+         debug: false 
