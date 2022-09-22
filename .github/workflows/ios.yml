@@ -10,38 +10,65 @@ on:
 
 jobs:
   build:
-    name: Build
-    env:
-      SCHEME: "Actions"
-      DEVICE: "iPhone 11"
-      DERIVED_DATA_PATH: ios/ExtentiaDemoApp.xcodeproj
-    runs-on: macOS-latest
-    
+    name: Build & Release
+    runs-on: macos-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
-      - name: Set up Node.js 14.x
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
         with:
-          node-version: 14.x
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.2.0'
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build apk --debug --split-per-abi
+      - run: pwd && ls -l
+      - run: |
+          flutter build ios --no-codesign
+          cd build/ios/iphoneos
+          mkdir Payload
+          cd Payload
+          ln -s ../Runner.app
+          cd ..
+          zip -r app.ipa Payload
+          pwd
+          ls -l
+
+# jobs:
+#   build:
+#     name: Build
+#     env:
+#       SCHEME: "Actions"
+#       DEVICE: "iPhone 11"
+#       DERIVED_DATA_PATH: ios/ExtentiaDemoApp.xcodeproj
+#     runs-on: macOS-latest
+    
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+        
+#       - name: Set up Node.js 14.x
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: 14.x
           
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
+#       - name: Install dependencies
+#         run: npm install --legacy-peer-deps
         
-      - name: Install pod dependencies
-        run: |
-          cd ios && pod install 
-      - name: Checkout project
-        uses: actions/checkout@v1
+#       - name: Install pod dependencies
+#         run: |
+#           cd ios && pod install 
+#       - name: Checkout project
+#         uses: actions/checkout@v1
       
-      - name: Build application
-        run: |
-         cd ios
-         set -o pipefail && xcodebuild clean -scheme $SCHEME -destination "platform=iOS Simulator,name=$DEVICE" -derivedDataPath $DERIVED_DATA_PATH build-for-testing | xcpretty --color --simple
+#       - name: Build application
+#         run: |
+#          cd ios
+#          set -o pipefail && xcodebuild clean -scheme $SCHEME -destination "platform=iOS Simulator,name=$DEVICE" -derivedDataPath $DERIVED_DATA_PATH build-for-testing | xcpretty --color --simple
    
-      - name: Upload products
-        uses: actions/upload-artifact@v1
-        with:
-         name: Products
-         path: DerivedData/Build/Products
+#       - name: Upload products
+#         uses: actions/upload-artifact@v1
+#         with:
+#          name: Products
+#          path: DerivedData/Build/Products
