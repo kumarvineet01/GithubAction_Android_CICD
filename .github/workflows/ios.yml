@@ -37,6 +37,7 @@ jobs:
       
       - name: Build application
         run: |
+         cd ios
          set -o pipefail && xcodebuild clean -scheme $SCHEME -destination "platform=iOS Simulator,name=$DEVICE" -derivedDataPath $DERIVED_DATA_PATH build-for-testing | xcpretty --color --simple
    
       - name: Upload products
