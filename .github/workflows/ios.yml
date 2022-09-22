@@ -16,16 +16,31 @@ jobs:
       DEVICE: "iPhone 11"
       DERIVED_DATA_PATH: ios\ExtentiaDemoApp.xcodeproj\xcshareddata\xcschemes
     runs-on: macOS-latest
+    
     steps:
-    - name: Checkout project
-      uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Set up Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+        
+      - name: Install pod dependencies
+        run: |
+          cd ios && pod install 
+      - name: Checkout project
+        uses: actions/checkout@v1
       
-    - name: Build application
-      run: |
-        set -o pipefail && xcodebuild clean -scheme $SCHEME -destination "platform=iOS Simulator,name=$DEVICE" -derivedDataPath $DERIVED_DATA_PATH build-for-testing | xcpretty --color --simple
+      - name: Build application
+        run: |
+         set -o pipefail && xcodebuild clean -scheme $SCHEME -destination "platform=iOS Simulator,name=$DEVICE" -derivedDataPath $DERIVED_DATA_PATH build-for-testing | xcpretty --color --simple
    
-    - name: Upload products
-      uses: actions/upload-artifact@v1
-      with:
-        name: Products
-        path: DerivedData/Build/Products
+      - name: Upload products
+        uses: actions/upload-artifact@v1
+        with:
+         name: Products
+         path: DerivedData/Build/Products
