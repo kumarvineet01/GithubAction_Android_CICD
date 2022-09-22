@@ -14,7 +14,7 @@ jobs:
     env:
       SCHEME: "Actions"
       DEVICE: "iPhone 11"
-      DERIVED_DATA_PATH: ios
+      DERIVED_DATA_PATH: ios/ExtentiaDemoApp.xcodeproj
     runs-on: macOS-latest
     
     steps:
